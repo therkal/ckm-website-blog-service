@@ -1,13 +1,22 @@
-greeting:
-  message: "hello"
-mp:
-  messaging:
-    outgoing:
-      words-out:
-        topic: "words"
-    incoming:
-      words-in:
-        auto:
-          offset:
-            reset: "earliest"
-        topic: "words"
+quarkus:
+  live-reload:
+    instrumentation: true
+  application:
+    name: ckm-blog-service
+  http:
+    cors: true
+    port: 8082
+  oidc:
+    auth-server-url: https://iam.martens.live/auth/realms/ckm-website
+    client-id: ckm-app-client
+    credentials:
+      secret: secretHere
+  kafka-streams:
+    topics: ckm-blogs
+    auto:
+      offset:
+        reset: earliest
+
+kafka:
+  bootstrap:
+    servers: kafka:9092

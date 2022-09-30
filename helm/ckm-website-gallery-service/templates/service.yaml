@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ckm-website-gallery-service.fullname" . }}
+  labels:
+    {{- include "ckm-website-gallery-service.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "ckm-website-gallery-service.selectorLabels" . | nindent 4 }}

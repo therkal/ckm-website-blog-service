@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/therkal/ckm-website-gallery-service
+  repository: ghcr.io/therkal/ckm-website-blog-service
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -53,13 +53,13 @@ ingress:
   hosts:
     - host: photo.martens.live
       paths:
-        - path: /gallery(/|$)(.*)
+        - path: /blog(/|$)(.*)
           pathType: Prefix
           backend:
             service:
-              name: ckm-website-gallery-service
+              name: ckm-website-blog-service
               port:
-                number: 8081
+                number: 8082
   tls:
     - secretName: ckm-certificate-secret
       hosts:

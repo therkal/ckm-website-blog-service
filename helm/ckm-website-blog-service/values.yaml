@@ -43,7 +43,7 @@ livenessProbe:
 
 service:
   type: ClusterIP
-  port: 8081
+  port: 8082
 
 ingress:
   enabled: true

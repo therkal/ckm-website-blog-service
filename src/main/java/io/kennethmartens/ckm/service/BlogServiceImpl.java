@@ -6,6 +6,7 @@ import io.kennethmartens.ckm.streaming.repository.BlogInteractiveQueryService;
 import io.smallrye.mutiny.Uni;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
 import java.util.Date;
@@ -52,5 +53,19 @@ public class BlogServiceImpl {
         return Uni.createFrom()
                 .item(blogInteractiveQueryService.get())
                 .map(galleries -> Response.ok(galleries).build());
+    }
+
+
+    public Uni<Response> getById(String id) {
+        return this.findById(id)
+                .map(blog -> Response.ok(blog).build());
+    }
+
+    private Uni<Blog> findById(String id) {
+        return Uni.createFrom()
+                .item(blogInteractiveQueryService.getById(id))
+                .onItem().ifNull().failWith(new NotFoundException(
+                        String.format("Gallery with id %1$s not found", id)
+                ));
     }
 }

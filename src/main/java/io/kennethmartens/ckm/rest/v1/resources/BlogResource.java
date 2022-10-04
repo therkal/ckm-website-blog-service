@@ -28,7 +28,13 @@ public class BlogResource {
         return this.blogService.get();
     }
 
-//    @RolesAllowed({"blog-admin"})
+    @Path("{id}")
+    @GET
+    public Uni<Response> getById(String id) {
+        return this.blogService.getById(id);
+    }
+
+    @RolesAllowed({"blog-admin"})
     @POST
     public Uni<Response> createBlog(Blog blog) {
         log.info("POST request to {} with {}", API_BLOG, blog);

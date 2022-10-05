@@ -68,4 +68,13 @@ public class BlogServiceImpl {
                         String.format("Gallery with id %1$s not found", id)
                 ));
     }
+
+    public Uni<Response> deleteById(String id) {
+        return Uni.createFrom()
+                .item(id)
+                .call(x -> this.findById(id))
+                // Send tombstone
+                .call(item -> this.blogProducer.produceEvent(id,null))
+                .map(galleryUni -> Response.noContent().build());
+    }
 }

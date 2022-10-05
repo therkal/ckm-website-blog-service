@@ -40,4 +40,12 @@ public class BlogResource {
         log.info("POST request to {} with {}", API_BLOG, blog);
         return this.blogService.persist(blog);
     }
+
+    @Path("{id}")
+    @RolesAllowed({"blog-admin"})
+    @DELETE
+    public Uni<Response> deleteBlogById(String id) {
+        log.info("DELETE request to {} with id {}", API_BLOG, id);
+        return this.blogService.deleteById(id);
+    }
 }

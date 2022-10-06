@@ -12,11 +12,14 @@ import java.util.Date;
 @ToString(callSuper = true)
 public class Blog {
 
+    private Date datePosted;
+    private Date dateModified;
+
     private String id;
     private String title;
     private String subtitle;
-    private Date datePosted;
     private ImageReference headerImageReference;
+
     private Integer loves;
 
     private String introduction;

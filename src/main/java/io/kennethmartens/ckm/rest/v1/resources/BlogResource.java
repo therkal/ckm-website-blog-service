@@ -43,6 +43,14 @@ public class BlogResource {
 
     @Path("{id}")
     @RolesAllowed({"blog-admin"})
+    @PUT
+    public Uni<Response> updateBlog(String id, Blog blog) {
+        log.info("PUT request to {} with id {} and body {}", API_BLOG, id, blog);
+        return this.blogService.update(id, blog);
+    }
+
+    @Path("{id}")
+    @RolesAllowed({"blog-admin"})
     @DELETE
     public Uni<Response> deleteBlogById(String id) {
         log.info("DELETE request to {} with id {}", API_BLOG, id);

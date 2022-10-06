@@ -33,11 +33,29 @@ public class BlogServiceImpl {
 
                     blog.setId(uuid);
                     blog.setDatePosted(new Date());
+                    blog.setDateModified(new Date());
                     blog.setLoves(0);
 
                     return blog;
                 })
                 .flatMap(this::updateBlogEvent);
+    }
+
+    public Uni<Response> update(String id, Blog blog) {
+        return this.findById(id)
+                .map(foundBlog -> {
+                    foundBlog.setTitle(blog.getTitle());
+                    foundBlog.setSubtitle(blog.getSubtitle());
+                    foundBlog.setIntroduction(blog.getIntroduction());
+                    foundBlog.setBody(blog.getBody());
+                    foundBlog.setHeaderImageReference(blog.getHeaderImageReference());
+
+                    foundBlog.setDateModified(new Date());
+                    return foundBlog;
+                })
+                .call(updatedBlog -> this.blogProducer.produceEvent(id, updatedBlog))
+                // Transform result.
+                .map(galleryUpdatedEvent -> Response.noContent().build());
     }
 
     private Uni<Response> updateBlogEvent(Blog toBeCreated) {
@@ -77,4 +95,5 @@ public class BlogServiceImpl {
                 .call(item -> this.blogProducer.produceEvent(id,null))
                 .map(galleryUni -> Response.noContent().build());
     }
+
 }

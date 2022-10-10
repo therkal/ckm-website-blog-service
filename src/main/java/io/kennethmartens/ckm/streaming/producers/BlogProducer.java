@@ -8,13 +8,16 @@ import io.smallrye.reactive.messaging.kafka.Record;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.eclipse.microprofile.reactive.messaging.OnOverflow;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 @Slf4j
 @ApplicationScoped
 public class BlogProducer {
 
+    @Inject
     @Channel(TopologyProducer.CKM_BLOGS_TOPIC)
     Emitter<Record<String, Blog>> emitter;
 

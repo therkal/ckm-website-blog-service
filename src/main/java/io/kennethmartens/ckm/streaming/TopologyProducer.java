@@ -1,7 +1,9 @@
 package io.kennethmartens.ckm.streaming;
 
 import io.kennethmartens.ckm.data.Blog;
+import io.quarkus.kafka.client.serialization.ObjectMapperDeserializer;
 import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
+import io.smallrye.mutiny.subscription.MultiEmitter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
@@ -37,6 +39,7 @@ public class TopologyProducer {
 
     @Produces
     public Topology buildTopology() {
+
         StreamsBuilder streamsBuilder = new StreamsBuilder();
 
         KeyValueBytesStoreSupplier storeSupplier = Stores.persistentKeyValueStore(
@@ -49,7 +52,6 @@ public class TopologyProducer {
                         .withKeySerde(Serdes.String())
                         .withValueSerde(blogObjectMapperSerde)
         );
-
 
         return streamsBuilder.build();
     }

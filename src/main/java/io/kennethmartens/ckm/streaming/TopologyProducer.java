@@ -45,7 +45,7 @@ public class TopologyProducer {
         KeyValueBytesStoreSupplier storeSupplier = Stores.persistentKeyValueStore(
                 CKM_BLOGS_STORE);
 
-        GlobalKTable<String, Blog> s = streamsBuilder.globalTable(
+        streamsBuilder.globalTable(
                 CKM_BLOGS_TOPIC,
                 Consumed.with(Serdes.String(), blogObjectMapperSerde),
                 Materialized.<String, Blog> as(storeSupplier)

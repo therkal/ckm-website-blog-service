@@ -20,3 +20,14 @@ quarkus:
 kafka:
   bootstrap:
     servers: kafka:9092
+
+mp:
+  messaging:
+    incoming:
+      ckm-blogs-incoming:
+        connector: smallrye-kafka
+        topic: ckm-blogs
+        group:
+          id: ckm-blog-consumer
+
+

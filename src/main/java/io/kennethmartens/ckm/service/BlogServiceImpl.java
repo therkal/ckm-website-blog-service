@@ -8,7 +8,6 @@ import io.smallrye.mutiny.Uni;
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
-import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.KeyValue;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Message;
+import org.jboss.resteasy.reactive.ResponseHeader;
 import org.jboss.resteasy.reactive.RestSseElementType;
 import org.jboss.resteasy.reactive.RestStreamElementType;
 import org.jboss.resteasy.reactive.common.NotImplementedYet;
@@ -78,6 +79,7 @@ public class BlogResource {
     @Channel("ckm-blogs-incoming")
     Multi<Record<String, Blog>> blogs;
     @Path("/stream")
+    @ResponseHeader(name = "X-Accel-Buffering", value = "no")
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @RestStreamElementType(MediaType.APPLICATION_JSON)
     @GET

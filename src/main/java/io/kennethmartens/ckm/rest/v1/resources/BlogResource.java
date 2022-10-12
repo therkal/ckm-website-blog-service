@@ -80,6 +80,8 @@ public class BlogResource {
     Multi<Record<String, Blog>> blogs;
     @Path("/stream")
     @ResponseHeader(name = "X-Accel-Buffering", value = "no")
+    @ResponseHeader(name = "Connection" , value = "keep-alive")
+    @ResponseHeader(name = "Cache-Control", value = "no-cache")
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @RestStreamElementType(MediaType.APPLICATION_JSON)
     @GET

@@ -16,15 +16,26 @@ import org.jboss.resteasy.reactive.ResponseHeader;
 import org.jboss.resteasy.reactive.RestSseElementType;
 import org.jboss.resteasy.reactive.RestStreamElementType;
 import org.jboss.resteasy.reactive.common.NotImplementedYet;
+import org.reactivestreams.Publisher;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.sse.OutboundSseEvent;
+import javax.ws.rs.sse.Sse;
+import javax.ws.rs.sse.SseBroadcaster;
 import java.awt.print.Book;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Slf4j
 @Path(BlogResource.API_BLOG)
@@ -78,6 +89,7 @@ public class BlogResource {
      */
     @Channel("ckm-blogs-incoming")
     Multi<Record<String, Blog>> blogs;
+
     @Path("/stream")
     @ResponseHeader(name = "X-Accel-Buffering", value = "no")
     @ResponseHeader(name = "Connection" , value = "keep-alive")
@@ -86,7 +98,13 @@ public class BlogResource {
     @RestStreamElementType(MediaType.APPLICATION_JSON)
     @GET
     public Multi<ServerSentEvent<String,Blog>> getBlogStream() {
-        return blogs.onItem().transform(stringBlogRecord -> new ServerSentEvent<>(stringBlogRecord.key(), stringBlogRecord.value()));
-
+        return blogs
+                .onItem().transform(stringBlogRecord -> new ServerSentEvent<>(stringBlogRecord.key(), stringBlogRecord.value()))
+                // ToDo: Currently, NGINX terminates the Stream after 60 seconds.
+                // ToDo: Complete Stream if not completed after 55 seconds.
+                // ToDo: Browser implementation wil reconnect automatically to the stream if completed.
+                .ifNoItem().after(Duration.of(55, ChronoUnit.SECONDS))
+                .recoverWithCompletion();
     }
+
 }

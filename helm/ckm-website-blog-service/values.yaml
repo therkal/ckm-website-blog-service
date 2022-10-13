@@ -50,6 +50,12 @@ ingress:
   className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header Connection '';
+      chunked_transfer_encoding off;
+      proxy_cache off;
+      proxy_set_header X-Accel-Buffering no;
+      proxy_set_header Connection keep-alive;
   hosts:
     - host: photo.martens.live
       paths:

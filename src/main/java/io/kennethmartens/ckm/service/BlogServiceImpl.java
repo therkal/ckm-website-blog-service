@@ -8,8 +8,10 @@ import io.smallrye.mutiny.Uni;
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class BlogServiceImpl {
@@ -68,7 +70,11 @@ public class BlogServiceImpl {
 
     public Uni<Response> get() {
         return Uni.createFrom()
-                .item(blogInteractiveQueryService.get())
+                .item(blogInteractiveQueryService.get().stream()
+                        // Sort dates in DESC order, getting the newest post first.
+                        .sorted((o1, o2) -> o2.getDatePosted().compareTo(o1.getDatePosted()))
+                        .collect(Collectors.toList())
+                )
                 .map(galleries -> Response.ok(galleries).build());
     }
 
